@@ -37,4 +37,20 @@ end
 
 #=> Returns a new hash object according the the return value of the block. { c: 3, d: 4, e: 5 }
 
+# Writing Methods that take Blocks
+
+# method implementation
+def increment(number)
+  if block_given?
+    yield(number + 1)
+  end
+  number + 1
+end
+
+# method invocation
+increment(5) do |num|
+  puts num
+end
+
 =end
+
