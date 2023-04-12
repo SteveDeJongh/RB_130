@@ -52,5 +52,37 @@ increment(5) do |num|
   puts num
 end
 
-=end
+# Writing our own `times` method.
 
+def times(number)
+  counter = 0
+  while counter < number do
+    yield(counter) # yield to block and pass counter as an argument.
+    counter += 1
+  end
+
+  number # Return the original method argument to match behavior of `integer#times`
+end
+
+times(5) do |num|
+  puts num
+end
+
+# Writing our own `each` method.
+
+def each(array)
+  counter = 0
+
+  while counter < array.size
+    yield(array[counter])
+    counter += 1
+  end
+
+  array
+end
+
+arr = [1,2,3]
+
+p each(arr) {|x| puts x} #=> Returns [1, 2, 3] , outputs 1 2 3 on seperate lines
+
+=end
