@@ -85,4 +85,34 @@ arr = [1,2,3]
 
 p each(arr) {|x| puts x} #=> Returns [1, 2, 3] , outputs 1 2 3 on seperate lines
 
+# Assignment: Build a `select` method.
+
+def select(array)
+  counter = 0
+  result = []
+
+  while counter < array.size
+    if yield(array[counter])
+      result << array[counter]
+    end
+    counter += 1
+  end
+
+  result
+end
+
+# My solution required the element lookup twice and can be streamlined by assigned the element to a local variable within
+# the `while` loop.
+
+# while counter < array.size
+#   curr_element = array[counter]
+#   result << curr_element if yield(curr_element)
+#   counter += 1
+# end
+
+p select([1,2,3]) {|x| x.odd?}
+
 =end
+
+# Assignment: Build a `reduce` method
+
