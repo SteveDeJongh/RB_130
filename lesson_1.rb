@@ -229,6 +229,11 @@ class TodoList
     else
       raise TypeError.new("Can only add Todo objects")
     end
+
+    # Or
+    # raise TypeError, "can only add Todo objects" unless item.instance_of? Todo
+
+    # todos << item
   end
 
   alias << add
@@ -259,8 +264,59 @@ class TodoList
     else
       raise IndexError
     end
+
+    # Or using `array#fetch` to raise error
+    # todos.fetch(pos)
   end
 
+  def mark_done_at(pos)
+    if pos <= todos.size
+      todos[pos].done!
+    else
+      raise IndexError
+    end
+
+    # or using `TodoList#item_at` to raise error
+    # item_at(pos).done!
+  end
+
+  def mark_undone_at(pos)
+    if pos <= todos.size
+      todos[pos].undone!
+    else
+      raise IndexError
+    end
+
+    # Or using `TodoList#item_at`
+  end
+
+  def done!
+    todos.each {|item| item.done! }
+
+    # Or using `TodoList#mark_done_at`
+    # todos.each_with_index { |idx| mark_done_at(idx)}
+  end
+
+  def shift
+    todos.shift
+  end
+
+  def pop
+    todos.pop
+  end
+
+  def remove_at(pos)
+    if pos <= todos.size
+      todos.delete_at(pos)
+    else
+      raise IndexError
+    end
+  end
+
+  def to_s
+    puts "------ #{title} ------"
+    todos.each { |item| puts item }
+  end
 end
 
 
@@ -304,35 +360,37 @@ p list.done?                     # returns true if all todos in the list are don
 # item_at
 # p list.item_at                    # raises ArgumentError
 p list.item_at(1)                 # returns 2nd item in list (zero based index)
-p list.item_at(100)               # raises IndexError
+# p list.item_at(100)               # raises IndexError
 
 # ---- Marking items in the list -----
 
 # mark_done_at
-list.mark_done_at               # raises ArgumentError
+# list.mark_done_at               # raises ArgumentError
 list.mark_done_at(1)            # marks the 2nd item as done
-list.mark_done_at(100)          # raises IndexError
+# list.mark_done_at(100)          # raises IndexError
 
 # mark_undone_at
-list.mark_undone_at             # raises ArgumentError
+# list.mark_undone_at             # raises ArgumentError
 list.mark_undone_at(1)          # marks the 2nd item as not done,
-list.mark_undone_at(100)        # raises IndexError
+# list.mark_undone_at(100)        # raises IndexError
 
 # done!
 list.done!                      # marks all items as done
 
+p list
+
 # ---- Deleting from the list -----
 
 # shift
-list.shift                      # removes and returns the first item in list
+# list.shift                      # removes and returns the first item in list
 
 # pop
-list.pop                        # removes and returns the last item in list
+# list.pop                        # removes and returns the last item in list
 
 # remove_at
-list.remove_at                  # raises ArgumentError
+# list.remove_at                  # raises ArgumentError
 list.remove_at(1)               # removes and returns the 2nd item
-list.remove_at(100)             # raises IndexError
+# list.remove_at(100)             # raises IndexError
 
 # ---- Outputting the list -----
 
