@@ -250,8 +250,12 @@ class TodoList
     todos.last
   end
 
-  def to_a
-    todos
+  def shift
+    todos.shift
+  end
+
+  def pop
+    todos.pop
   end
 
   def done?
@@ -297,14 +301,6 @@ class TodoList
     # todos.each_with_index { |idx| mark_done_at(idx)}
   end
 
-  def shift
-    todos.shift
-  end
-
-  def pop
-    todos.pop
-  end
-
   def remove_at(pos)
     if pos <= todos.size
       todos.delete_at(pos)
@@ -316,6 +312,10 @@ class TodoList
   def to_s
     puts "------ #{title} ------"
     todos.each { |item| puts item }
+  end
+
+  def to_a
+    todos
   end
 
   def each
@@ -354,6 +354,42 @@ class TodoList
     list
   end
 
+  def find_by_title(name)
+    # result = TodoList.new('temp')
+    
+    # each {|item| result << item if item.title == name} 
+
+    # result.size > 0 ? result.first : nil
+    # or
+    select {|todo| todo.title == name }.first
+  end
+
+  def all_done
+    select { |todo| todo.done? }
+  end
+
+  def all_not_done
+    select { |todo| !todo.done? }
+  end
+
+  def mark_done(name)
+    each {|todo| todo.done! if todo.title == name }
+
+    self
+
+    # or
+
+    # find_by_title(name) && find_by_title(name).done!
+  end
+
+  def mark_all_done
+    each { |todo| todo.done! }
+  end
+
+  def mark_all_undone
+    each { |todo| todo.undone! }
+  end
+  
   private
 
   attr_accessor :todos
@@ -456,8 +492,6 @@ list.each do |x|
   puts x
 end
 
-=end
-
 # Assignment: TodoList#select
 
 todo1 = Todo.new("Buy milk")
@@ -474,3 +508,28 @@ todo1.done!
 results = list.select { |todo| todo.done? }    # you need to implement this method
 
 puts results.inspect
+
+=end
+
+# Assignment: TodoList Methods
+
+todo1 = Todo.new("Buy milk")
+todo2 = Todo.new("Clean room")
+todo3 = Todo.new("Go to gym")
+
+list = TodoList.new("Today's Todos")
+list.add(todo1)
+list.add(todo2)
+list.add(todo3)
+
+todo1.done!
+
+p list.find_by_title('Buy milk')
+p list.find_by_title('Buy milkeeee')
+
+p list.all_done
+p list.all_not_done
+
+p list.mark_done('Go to gym')
+p list.mark_all_done
+p list.mark_all_undone
