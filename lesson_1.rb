@@ -323,6 +323,8 @@ class TodoList
       yield(todo)
     end
 
+    self # Added `self` to return the original object from the `TodoList#each` method.
+
     # Without using `Array#each`
     # counter = 0
 
@@ -334,11 +336,30 @@ class TodoList
     # todos
   end
 
+  # def select # Select method but returning an array object.
+  #   result = []
+  #   each do |item| # Calling `todolist#each`
+  #     result << item if yield(item)
+  #   end
+
+  #   result
+  # end
+
+  def select # `TodoList#select` method but returning a `TodoList` object.
+    list = TodoList.new(title)
+    each do |item| # Calling `todolist#each`
+      list << item if yield(item)
+    end
+
+    list
+  end
+
   private
 
   attr_accessor :todos
 end
 
+=begin
 
 # given
 todo1 = Todo.new("Buy milk")
@@ -353,8 +374,6 @@ list.add(todo1)                 # adds todo1 to end of list, returns list
 list.add(todo2)                 # adds todo2 to end of list, returns list
 list.add(todo3)                 # adds todo3 to end of list, returns list
 # list.add(1)                     # raises TypeError with message "Can only add Todo objects"
-
-=begin
 
 # <<
 # same behavior as add
@@ -431,10 +450,27 @@ list.to_s                      # returns string representation of the list
 # [X] Clean room
 # [ ] Go to gym
 
-=end
-
 # Assignment: TodoList#each
 
 list.each do |x|
   puts x
 end
+
+=end
+
+# Assignment: TodoList#select
+
+todo1 = Todo.new("Buy milk")
+todo2 = Todo.new("Clean room")
+todo3 = Todo.new("Go to gym")
+
+list = TodoList.new("Today's Todos")
+list.add(todo1)
+list.add(todo2)
+list.add(todo3)
+
+todo1.done!
+
+results = list.select { |todo| todo.done? }    # you need to implement this method
+
+puts results.inspect
