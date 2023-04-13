@@ -112,7 +112,48 @@ end
 
 p select([1,2,3]) {|x| x.odd?}
 
-=end
-
 # Assignment: Build a `reduce` method
 
+def reduce(arr, start = 0)
+  counter = 0
+  accumulator = start
+
+  while counter < arr.size
+    accumulator = yield(accumulator, arr[counter])
+    counter += 1
+  end
+
+  accumulator
+end
+
+array = [1,2,3,4,5]
+
+p reduce([1,2,3]) { |acc, num| acc + num } #=> 6
+p reduce(array) { |acc, num| acc + num } #=> 15
+p reduce(array, 10) { |acc, num| acc + num } #=> 25
+# p reduce(array) { |acc, num| acc + num if num.odd? } #=> Nomethoderror.
+
+# To add functionality where values are non-numeric.
+
+def reduce(arr, start = arr[0])
+  counter = start == arr[0] ? 1 : 0
+  accumulator = start
+
+  while counter < arr.size
+    accumulator = yield(accumulator, arr[counter])
+    counter += 1
+  end
+
+  accumulator
+end
+
+p reduce(['a', 'b', 'c']) { |acc, value| acc += value }     # => 'abc'
+p reduce([[1, 2], ['a', 'b']]) { |acc, value| acc + value } # => [1, 2, 'a', 'b']
+array = [1,2,3,4,5]
+
+p reduce([1,2,3]) { |acc, num| acc + num } #=> 6
+p reduce(array) { |acc, num| acc + num } #=> 15
+p reduce(array, 10) { |acc, num| acc + num } #=> 25
+# p reduce(array) { |acc, num| acc + num if num.odd? } #=> Nomethoderror.
+
+=end
