@@ -216,7 +216,7 @@ puts todo3 #=> [ ] Go to gym
 =end
 
 class TodoList
-  attr_accessor :title, :todos
+  attr_accessor :title
 
   def initialize(title)
     @title = title
@@ -317,6 +317,26 @@ class TodoList
     puts "------ #{title} ------"
     todos.each { |item| puts item }
   end
+
+  def each
+    todos.each do |todo|
+      yield(todo)
+    end
+
+    # Without using `Array#each`
+    # counter = 0
+
+    # while counter < todos.size
+    #   yield(item_at(counter))
+    #   counter += 1
+    # end
+
+    # todos
+  end
+
+  private
+
+  attr_accessor :todos
 end
 
 
@@ -333,6 +353,8 @@ list.add(todo1)                 # adds todo1 to end of list, returns list
 list.add(todo2)                 # adds todo2 to end of list, returns list
 list.add(todo3)                 # adds todo3 to end of list, returns list
 # list.add(1)                     # raises TypeError with message "Can only add Todo objects"
+
+=begin
 
 # <<
 # same behavior as add
@@ -408,3 +430,11 @@ list.to_s                      # returns string representation of the list
 # [ ] Buy milk
 # [X] Clean room
 # [ ] Go to gym
+
+=end
+
+# Assignment: TodoList#each
+
+list.each do |x|
+  puts x
+end
