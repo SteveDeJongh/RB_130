@@ -509,8 +509,6 @@ results = list.select { |todo| todo.done? }    # you need to implement this meth
 
 puts results.inspect
 
-=end
-
 # Assignment: TodoList Methods
 
 todo1 = Todo.new("Buy milk")
@@ -533,3 +531,31 @@ p list.all_not_done
 p list.mark_done('Go to gym')
 p list.mark_all_done
 p list.mark_all_undone
+
+# Local variable initialized before closure is created, Works fine.
+
+def call_me(some_code)
+  some_code.call
+end
+
+name = "Robert"
+
+chunk_of_code = Proc.new {puts "hi #{name}"}
+
+name = "Griffin III"        # re-assign name after Proc initialization
+
+call_me(chunk_of_code)
+
+# Local variable initialized after closure is created, doesn't work unless explicitly passed in.
+
+def call_me(some_code)
+  some_code.call
+end
+
+chunk_of_code = Proc.new {puts "hi #{name}"} #=> NameError: Undefined local variable or method "name"
+
+name = "Griffin III"        # re-assign name after Proc initialization
+
+call_me(chunk_of_code)
+
+=end
