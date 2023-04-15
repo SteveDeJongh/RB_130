@@ -6,6 +6,8 @@ Minitest::Reporters.use!
 
 require_relative 'car'
 
+# Assert-style syntax
+
 class CarTest < MiniTest::Test
   def test_wheels
     car = Car.new
