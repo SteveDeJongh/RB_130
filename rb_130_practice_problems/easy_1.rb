@@ -119,9 +119,8 @@ p divisors(98) == [1, 2, 7, 14, 49, 98]
 # p divisors(99400891) == [1, 9967, 9973, 99400891] # may take a minute
 p divisors(999962000357)
 
-=end
-
 # 5) Encrypted Pioneers
+
 stringer = 'Nqn Ybirynpr,
 Tenpr Ubccre,
 Nqryr Tbyqfgvar,
@@ -144,7 +143,7 @@ Tregehqr Oynapu'
 
 names = stringer.split(',').map(&:strip)
 
-def rot13(name)
+def rot131(name)
   chars = name.chars
   chars.map do |char|
     startord = char.ord
@@ -161,6 +160,113 @@ def rot13(name)
   end.join('')
 end
 
-p rot13('HELLO')
+p rot131('HELLO')
 
-names.each { |x| p rot13(x)}
+names.each { |x| p rot131(x)}
+
+# Or
+
+def rot13(encrypted_text)
+  encrypted_text.each_char.reduce('') do |result, encrypted_char|
+    result + decipher_character(encrypted_char)
+  end
+end
+
+def decipher_character(encrypted_char)
+  case encrypted_char
+  when 'a'..'m', 'A'..'M' then (encrypted_char.ord + 13).chr
+  when 'n'..'z', 'N'..'Z' then (encrypted_char.ord - 13).chr
+  else                         encrypted_char
+  end
+end
+
+names.each do |name|
+  puts rot13(name)
+end
+
+# 6) Iterators: True for Any?
+
+def any?(arr)
+  arr.each { |x| return true if yield(x) }
+  false
+end
+
+p any?([1, 3, 5, 6]) { |value| value.even? } == true
+p any?([1, 3, 5, 7]) { |value| value.even? } == false
+p any?([2, 4, 6, 8]) { |value| value.odd? } == false
+p any?([1, 3, 5, 7]) { |value| value % 5 == 0 } == true
+p any?([1, 3, 5, 7]) { |value| true } == true
+p any?([1, 3, 5, 7]) { |value| false } == false
+p any?([]) { |value| true } == false
+
+# 7) Iterators: True for All?
+
+def all?(arr)
+  arr.each {|x| return false unless yield(x)}
+  true
+end
+
+p all?([1, 3, 5, 6]) { |value| value.odd? } == false
+p all?([1, 3, 5, 7]) { |value| value.odd? } == true
+p all?([2, 4, 6, 8]) { |value| value.even? } == true
+p all?([1, 3, 5, 7]) { |value| value % 5 == 0 } == false
+p all?([1, 3, 5, 7]) { |value| true } == true
+p all?([1, 3, 5, 7]) { |value| false } == false
+p all?([]) { |value| false } == true
+
+# 8) Iterators: True for None?
+
+def none?(arr)
+  arr.each {|x| return false if yield(x)}
+  true
+end
+
+# Alternatively, we can use our previsouly defined `all?` method and return the opposite.
+
+def none?(collection, &block)
+  !any?(collection, &block) # explicitly passing the block to the `any?` method.
+end
+
+p none?([1, 3, 5, 6]) { |value| value.even? } == false
+p none?([1, 3, 5, 7]) { |value| value.even? } == true
+p none?([2, 4, 6, 8]) { |value| value.odd? } == true
+p none?([1, 3, 5, 7]) { |value| value % 5 == 0 } == false
+p none?([1, 3, 5, 7]) { |value| true } == false
+p none?([1, 3, 5, 7]) { |value| false } == true
+p none?([]) { |value| true } == true
+
+# 9) Iterators: True for One?
+
+def one?(arr)
+  count = 0
+  arr.each do |x| 
+    count += 1 if yield(x)
+    return false if count > 1
+  end
+  count == 0 ? false : true
+end
+
+# or
+
+def one?(collection)
+  seen_one = false
+  collection.each do |element|
+    next unless yield(element)
+    return false if seen_one
+    seen_one = true
+  end
+  seen_one
+end
+
+p one?([1, 3, 5, 6]) { |value| value.even? }    # -> true
+p one?([1, 3, 5, 7]) { |value| value.odd? }     # -> false
+p one?([2, 4, 6, 8]) { |value| value.even? }    # -> false
+p one?([1, 3, 5, 7]) { |value| value % 5 == 0 } # -> true
+p one?([1, 3, 5, 7]) { |value| true }           # -> false
+p one?([1, 3, 5, 7]) { |value| false }          # -> false
+p one?([]) { |value| true }                     # -> false
+
+=end
+
+# 10) Count Items
+
