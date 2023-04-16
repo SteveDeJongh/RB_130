@@ -1,4 +1,6 @@
 ##### Lesson 2: TodoList test suite #####
+require 'simplecov'
+SimpleCov.start
 
 require 'minitest/autorun'
 require "minitest/reporters"
@@ -185,5 +187,54 @@ class TodoListTest < MiniTest::Test
   
     assert_equal(list.title, @list.title)
     assert_equal(list.to_s, @list.select{ |todo| todo.done? }.to_s)
+  end
+
+  def test_find_by_title
+    assert_equal(@todo1, @list.find_by_title('Buy milk'))
+  end
+
+  def test_all_done
+    @todo1.done!
+    temp = TodoList.new(@list.title)
+    temp << @todo1
+    assert_equal(temp.to_s, @list.all_done.to_s)
+  end
+
+  def test_all_not_done
+    @todo1.done!
+    @todo2.done!
+    temp = TodoList.new(@list.title)
+    temp << @todo3
+    assert_equal(temp.to_s, @list.all_not_done.to_s)
+  end
+
+  def test_mark_done
+    temp = TodoList.new(@list.title)
+    temp << @todo1 << @todo2 << @todo3
+    temp.first.done!
+    assert_equal(temp.to_s, @list.mark_done('Buy milk').to_s)
+  end
+
+  def test_mark_all_done
+    temp = TodoList.new(@list.title)
+    t1 = @todo1.clone
+    t1.done!
+    t2 = @todo2.clone
+    t2.done!
+    t3= @todo3.clone
+    t3.done!
+    temp << t1 << t2 << t3
+    assert_equal(temp.to_s, @list.mark_all_done.to_s)
+  end
+
+  def test_mark_all_undone
+    temp = TodoList.new(@list.title)
+    @todos.each do |todo| 
+      td = todo.clone
+      td.done!
+      temp << td
+    end
+    temp.mark_all_undone
+    assert_equal(temp.to_s, @list.mark_all_undone.to_s)
   end
 end
