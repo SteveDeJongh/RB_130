@@ -116,18 +116,18 @@ class TodoListTest < MiniTest::Test
     assert_equal([@todo2, @todo3], @list.to_a)
   end
 
-  # def test_to_s
-  #   output = <<~OUTPUT.chomp
-  #   ----- Today's Todos -----
-  #   [ ] Buy milk
-  #   [ ] Clean room
-  #   [ ] Go to gym
-  #   OUTPUT
+  # def test_to_s # using <<~ HEREDOC to remove preceding spaces.
+    # output = <<-OUTPUT.chomp.gsub /^\s+/, ""
+    # ---- Today's Todos ----
+    # [ ] Buy milk
+    # [ ] Clean room
+    # [ ] Go to gym
+    # OUTPUT
 
   #   assert_equal(output, @list.to_s)
   # end
 
-  def test_to_s
+  def test_to_s # using <<- HEREDOC and gsub for newline characters and leading whitespace.
     output = <<-OUTPUT.chomp.gsub /^\s+/, ""
     ---- Today's Todos ----
     [ ] Buy milk
@@ -138,5 +138,52 @@ class TodoListTest < MiniTest::Test
     assert_equal(output, @list.to_s)
   end
 
+  def test_to_s_1_done
+    output = <<-OUTPUT.chomp.gsub /^\s+/, ""
+    ---- Today's Todos ----
+    [ ] Buy milk
+    [ ] Clean room
+    [X] Go to gym
+    OUTPUT
+    @todo3.done! # or @list.markdone_at(2)
+    assert_equal(output, @list.to_s)
+  end
 
+  def test_to_s_all_done
+    output = <<-OUTPUT.chomp.gsub /^\s+/, ""
+    ---- Today's Todos ----
+    [X] Buy milk
+    [X] Clean room
+    [X] Go to gym
+    OUTPUT
+    @list.mark_all_done
+    assert_equal(output, @list.to_s)
+  end
+
+  def test_each_iterates
+    result = []
+    @list.each { |todo| result << todo }
+    assert_equal([@todo1, @todo2, @todo3], result)
+  end
+
+  def test_each_return
+    result = @list.each {|x| x }
+    assert_equal(@list, result)
+  end
+
+  def test_select
+    result = @list.select { |todo| todo == @todo1 }
+    compare = TodoList.new(@list.title)
+    compare << @todo1
+    assert_equal(compare.first, result.first)
+  end
+
+  def test_select_alt
+    @todo1.done!
+    list = TodoList.new(@list.title)
+    list.add(@todo1)
+  
+    assert_equal(list.title, @list.title)
+    assert_equal(list.to_s, @list.select{ |todo| todo.done? }.to_s)
+  end
 end
