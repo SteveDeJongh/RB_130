@@ -1,4 +1,4 @@
-##### RB 130 - Ruby Foundations: More Topics - Easy 1 #####
+##### RB 130 - Ruby Foundations: More Topics - Easy 2 #####
 
 =begin
 
