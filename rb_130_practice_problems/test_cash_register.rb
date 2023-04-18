@@ -1,8 +1,8 @@
 # Test file for cash_register class
 
 require 'minitest/autorun'
-# require "minitest/reporters"
-# Minitest::Reporters.use!
+require "minitest/reporters"
+Minitest::Reporters.use!
 
 require_relative 'cash_register' # Class we want to test
 require_relative 'transaction' # Class required for `cash_register` to be tested.
@@ -65,5 +65,12 @@ class CashRegisterTest < MiniTest::Test
     transaction = Transaction.new(item_cost)
     transaction.prompt_for_payment(input: fullcost, output: output)
     assert_equal(35, transaction.amount_paid)
+  end
+
+  # Extras
+
+  def test_transaction_item_cost
+    transaction = Transaction.new(100)
+    assert_equal(100, transaction.item_cost)
   end
 end
