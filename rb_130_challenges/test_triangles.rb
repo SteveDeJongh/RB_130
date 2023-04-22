@@ -66,42 +66,42 @@ class TriangleTest < Minitest::Test
   end
 
   def test_no_size_is_illegal
-    skip
+    # skip
     assert_raises(ArgumentError) do
       triangle = Triangle.new(0, 0, 0)
     end
   end
 
   def test_negative_size_is_illegal
-    skip
+    # skip
     assert_raises(ArgumentError) do
       triangle = Triangle.new(3, 4, -5)
     end
   end
 
   def test_size_inequality_is_illegal
-    skip
+    # skip
     assert_raises(ArgumentError) do
       triangle = Triangle.new(1, 1, 3)
     end
   end
 
   def test_size_inequality_is_illegal_2
-    skip
+    # skip
     assert_raises(ArgumentError) do
       triangle = Triangle.new(7, 3, 2)
     end
   end
 
   def test_size_inequality_is_illegal_3
-    skip
+    # skip
     assert_raises(ArgumentError) do
       triangle = Triangle.new(10, 1, 3)
     end
   end
 
   def test_size_inequality_is_illegal_4
-    skip
+    # skip
     assert_raises(ArgumentError) do
       triangle = Triangle.new(1, 1, 2)
     end
