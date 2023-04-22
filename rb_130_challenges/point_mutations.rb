@@ -24,7 +24,6 @@ class DNA
     end
     distance
   end
-
 end
 
 # dna = DNA.new('ABCDE')
