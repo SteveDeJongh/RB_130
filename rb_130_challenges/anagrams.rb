@@ -16,22 +16,25 @@ class Anagram
 
   def match(comps)
     comps.select do |curr|
-      p curr.chars
-      curr.chars.all? do |char|
-        letter = char.downcase
-        p "#{letter.count(curr.downcase)} #{letter} in #{curr}"
-        p "main word #{letter.count(@word.downcase)} #{letter}"
-        letter.count(curr.downcase) == letter.count(@word.downcase)
+      curr.chars.all? do |x|
+        let = x.downcase
+        curr.downcase.count(let) == word.count(let)
       end &&
-      curr.downcase != @word.downcase &&
+      curr.downcase != word &&
       curr.size == @word.size
     end
   end
 
+  private
+
+  def word
+    @word.downcase
+  end
+
 end
 
-detector = Anagram.new('galea')
+# detector = Anagram.new('galea')
 
 # p detector
 
-p detector.match(['eagle'])
+# p detector.match(['eagle'])
