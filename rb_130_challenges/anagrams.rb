@@ -5,13 +5,11 @@ Rules:
 Anagrams are case insensitive
 Identical words are not anagrams
 
-
-
 =end
 
 class Anagram
   def initialize(word)
-    @word = word
+    @word = word.downcase
   end
 
   def match(comps)
@@ -21,15 +19,13 @@ class Anagram
         curr.downcase.count(let) == word.count(let)
       end &&
       curr.downcase != word &&
-      curr.size == @word.size
+      curr.size == word.size
     end
   end
 
   private
 
-  def word
-    @word.downcase
-  end
+  attr_reader :word
 
 end
 
