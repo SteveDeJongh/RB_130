@@ -51,30 +51,45 @@ NUMERALS = {"M" => 1000, "CM" => 900, "D" => 500, "CD" => 400, "C" => 100, "XC" 
             "X" => 10, "IX" => 9, "V" => 5, "IV" => 4, "I" => 1}
 
 class RomanNumeral
+  attr_reader :number
+
   def initialize(num)
     @number = num
   end
 
   def to_roman
     result = ""
-    curr_num = @number
+    curr_num = number
     NUMERALS.each do |k, v|
-      number = curr_num
+      num = curr_num
       loop do
-        if v <= number
-          result << k
-          number -= v
-        else
-          break
-        end
+        break if v > num
+        result << k
+        num -= v
       end
-      curr_num = number
+      curr_num = num
     end
 
     result
   end
+
+  # OR
+
+  # def to_roman
+  #   roman_version = ''
+  #   to_convert = number
+
+  #   NUMERALS.each do |key, value|
+  #     multiplier, remainder = to_convert.divmod(value)
+  #     if multiplier > 0
+  #       roman_version += (key * multiplier)
+  #     end
+  #     to_convert = remainder
+  #   end
+  #   roman_version
+  # end
 end
 
-firsttest = RomanNumeral.new(1000)
+# firsttest = RomanNumeral.new(1000)
 
-p firsttest.to_roman
+# p firsttest.to_roman
