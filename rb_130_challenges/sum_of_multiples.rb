@@ -12,7 +12,7 @@ sum numbers
 
 class SumOfMultiples
   attr_reader :multiples
-  @@defaults = [3,5]
+  # @@defaults = [3,5] # Class variable no needed with constructor able to accept many/no arguments.
 
   def initialize(*multiples)
     @multiples = (multiples.size > 0) ? multiples : [3,5]
