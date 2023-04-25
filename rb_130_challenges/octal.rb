@@ -29,7 +29,7 @@ class Octal
 
   def to_decimal
     digits = octal.chars.reverse
-    return 0 if valid_octal?(digits) # Moved code to a helper method.
+    return 0 if invalid_octal?(digits) # Moved code to a helper method.
     # return 0 if digits.any?{|x| x=~ /[a-zA-Z89]/ } # Checking for invalid characters/digits
     digits.map.with_index do |dig, idx|
       dig.to_i * (8**idx)
@@ -38,7 +38,7 @@ class Octal
 
   private
 
-  def valid_octal?(num)
+  def invalid_octal?(num)
     num.any?{|x| x=~ /[a-zA-Z89]/ }
   end
 end
