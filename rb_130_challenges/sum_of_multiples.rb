@@ -15,7 +15,7 @@ class SumOfMultiples
   @@defaults = [3,5]
 
   def initialize(*multiples)
-    @multiples = multiples
+    @multiples = (multiples.size > 0) ? multiples : [3,5]
   end
 
   def to(num)
@@ -29,21 +29,28 @@ class SumOfMultiples
     end.sum
   end
 
-  def self.to(num)
-    (0..(num-1)).to_a.map do |curr|
-      # @@defaults.any? {|x| curr % x == 0} ? curr : 0
-      # if @@defaults.any? {|x| curr % x == 0}
-      #   curr
-      # else
-      #   0
-      # end
-    end.sum
-  end
+  # My initial solution using a class variable.
 
+  # def self.to(num)
+  #   (0..(num-1)).to_a.map do |curr|
+  #     @@defaults.any? {|x| curr % x == 0} ? curr : 0
+  #     # if @@defaults.any? {|x| curr % x == 0}
+  #     #   curr
+  #     # else
+  #     #   0
+  #     # end
+  #   end.sum
+  # end
+
+  # Alternate class method, instantiating a new SumOfMultiples Object.
+
+  def self.to(num)
+    SumOfMultiples.new().to(num)
+  end
 end
 
-num = SumOfMultiples.new
+# num = SumOfMultiples.new
 
-p num.multiples
+# p num.multiples
 
-p SumOfMultiples.to(3)
+# p SumOfMultiples.to(3)
