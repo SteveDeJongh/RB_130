@@ -23,13 +23,14 @@ class Series
 
   def slices(count)
     raise ArgumentError if count > (digits.size)
-    result = []
-    idx = 0
-    while idx + count < digits.size + 1
-      result << digits.slice(idx, count)
-      idx += 1
-    end
-    result
+    # result = []
+    # idx = 0
+    # while idx + count < digits.size + 1
+    #   result << digits.slice(idx, count)
+    #   idx += 1
+    # end
+    # result
+    digits.each_cons(count).to_a # Much cleaner way to create the consecutive number arrays.
   end
 
 end
