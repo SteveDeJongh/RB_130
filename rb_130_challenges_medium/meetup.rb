@@ -9,15 +9,11 @@ Class Meetup
   constructor
   day(day, number)
 
-
-
-
 =end
 
 require 'date'
 
 class Meetup
-
   attr_reader :year, :month
 
   def initialize(year, month)
@@ -30,19 +26,17 @@ class Meetup
     start_day = Date.civil(year, month, start)
     day = whichday(day)
 
-    # puts "start day is #{start_day}"
-
     result = nil
- 
+
     start_day.upto(lastday(year, month)) do |date|
-      result = date.day if date.cwday == day
-      break if result != nil && iteration.capitalize != 'Last' 
+      result = date if date.cwday == day
+      break if !result.nil? && iteration.capitalize != 'Last'
     end
 
-    @date = result ? Date.civil(year, month, result) : nil
+    @date = result || nil
   end
 
-  # private
+  private
 
   def lastday(year, month)
     Date.civil(year, month, -1)
@@ -77,7 +71,6 @@ class Meetup
 end
 
 # d1 = Meetup.new(2016, 1)
-
 
 # p d1.day('Saturday', 'fifth')
 
