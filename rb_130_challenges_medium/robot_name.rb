@@ -14,46 +14,72 @@ Class Robot
 
 =end
 
+# class Robot
+#   attr_accessor :name
+
+#   @@used_names = []
+
+#   def initialize
+#     @name = generate_name
+#   end
+
+#   def reset
+#     @@used_names.delete(name)
+#     self.name = generate_name
+#   end
+
+#   private
+
+#   def generate_name
+#     letters = ('A'..'Z').to_a
+#     digits = ('0'..'9').to_a
+
+#     name = ""
+#     loop do
+
+#       2.times do |_|
+#         name << letters.shuffle[0] #could/should have used `array#sample` as well.
+#       end
+
+#       3.times do |_|
+#         name << digits.shuffle[0]
+#       end
+#       break unless @@used_names.include?(name)
+#       name = ""
+#     end
+
+#     @@used_names << name
+#     name
+#   end
+# end
+
+# My solution passes the tests, however doesn't quite fit the problems requirements of only initializing the 
+# @name when the robot is "turned on". It also does not put the old robot name back into the mix of
+# available names when the name is reset.
+
+# LS Solution
+
 class Robot
-  attr_accessor :name
+  @@names = []
 
-  @@used_names = []
-
-  def initialize
-    @name = generate_name
-    @@used_names << @name
+  def name
+    return @name if @name
+    @name = generate_name while @@names.include?(@name) || @name.nil?
+    @@names << @name
+    @name
   end
 
   def reset
-    self.name = generate_name
+    @@names.delete(@name)
+    @name = nil
   end
 
   private
 
   def generate_name
-    letters = ('A'..'Z').to_a
-    digits = ('0'..'9').to_a
-
-    name = ""
-    loop do
-
-      2.times do |_|
-        name << letters.shuffle[0]
-      end
-
-      3.times do |_|
-        name << digits.shuffle[0]
-      end
-      break unless @@used_names.include?(name)
-    end
-
+    name = ''
+    2.times { name << rand(65..90).chr }
+    3.times { name << rand(0..9).to_s }
     name
   end
-
 end
-
-# robot = Robot.new
-
-# p robot
-# robot.reset
-# p robot
