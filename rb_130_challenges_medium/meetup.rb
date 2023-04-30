@@ -30,12 +30,13 @@ class Meetup
     start_day = Date.civil(year, month, start)
     day = whichday(day)
 
-    puts "start day is #{start_day}"
+    # puts "start day is #{start_day}"
 
     result = nil
  
     start_day.upto(lastday(year, month)) do |date|
       result = date.day if date.cwday == day
+      break if result != nil && iteration.capitalize != 'Last' 
     end
 
     @date = result ? Date.civil(year, month, result) : nil
@@ -68,19 +69,16 @@ class Meetup
     when "Second"   then 8
     when "Third"    then 15
     when "Fourth"   then 22
-    when "Fith"    then 29
+    when "Fifth"    then 29
     when "Last"     then 22
-    when "Teenth"   then 7 # ????
+    when "Teenth"   then 13
     end
   end
 end
 
-d1 = Meetup.new(2023, 4)
+# d1 = Meetup.new(2016, 1)
 
-p d1
-p d1.lastday(2023, 4)
-p d1.startday('last')
 
-p d1.day('sunday', 'last')
+# p d1.day('Saturday', 'fifth')
 
 # p Date.civil(2023, 4, -1).day
