@@ -12,12 +12,11 @@ Methods:
 class:
   at (hours, minutes)
 instance
+  constructor
   + (minutes)
   - (minutes)
   ==
   to_s
-
-
 
 =end
 
