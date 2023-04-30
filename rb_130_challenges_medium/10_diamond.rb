@@ -27,8 +27,8 @@ unless letter is "A", add array index of spaces between two instances of the let
 
 class Diamond
   def self.make_diamond(letter)
-    letters = ('A'..letter).to_a + ('A'...letter).to_a.reverse
-    width = self.findwidth(letter)
+    letters = ('A'..letter).to_a + ('A'...letter).to_a.reverse # Initializing array of letters.
+    width = self.findwidth(letter) # Finding max text width for centering lines.
     
     letters.each_with_object([]) do |let, arr|
       arr << make_a_row(let).center(width)
@@ -41,7 +41,7 @@ class Diamond
     return "A" if letter == "A"
     return "B B" if letter == "B"
 
-    letter + determine_spaces(letter) + letter
+    letter + determine_spaces(letter) + letter # Returns string of "Letter (x number of spaces) letter"
   end
 
   def self.determine_spaces(letter)
@@ -54,13 +54,13 @@ class Diamond
       spaces += 2
     end
 
-    " " * spaces
+    " " * spaces # Returns string of spaces
   end
 
   def self.findwidth(letter)
     return 1 if letter == "A"
 
-    determine_spaces(letter).count(" ") + 2
+    determine_spaces(letter).count(" ") + 2 # returns count of spaces + 2 (for letters on either end)
   end
 end
 
