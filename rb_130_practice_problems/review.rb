@@ -91,4 +91,40 @@ name = "Dave"
 
 call_pro(chunk) #=> hi Dave # Proc is aware of the reassignment of `name`, even after the Proc is defined.
 
+# Example of method yielding to block:
+
+def blockmethod
+  puts "This is method execution before the block"
+  yield if block_given?
+  puts "This is method execution after the block"
+end
+
+blockmethod #=> Outputs both lines of text, and doesn't yield as no block is given.
+
+blockmethod { puts "From the block!"} #=> Outputs first line, yields to block and outputs text, then ouputs last line.
+
+# Example of method using passed in proc
+
+def usetheproc(passitin)
+  passitin.call
+end
+
+proc1 = Proc.new { puts "From the proc!" }
+
+usetheproc(proc1) #=> From the proc!
+
+def addone
+  number = 0
+  Proc.new {number += 1}
+end
+
+start1 = addone
+start2 = addone
+p start1 #=> <Proc:encoding... review.rb:120>
+p start1.call #=> 1
+p start1.call #=> 2
+p start2 #=> <Proc:encoding... review.rb:120> # note: This is a different, new proc from `start1`
+p start2.call #=> 1
+p start2 #=> Returns the same Proc object as 128
+
 =end
