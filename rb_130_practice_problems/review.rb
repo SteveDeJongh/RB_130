@@ -31,6 +31,10 @@ Gemfiles
 
 =end
 
+=begin
+
+# Code Examples:
+
 # Yielding to a block, and passing in a method parameter to be the block parameter.
 
 def takeablock(method_param)
@@ -39,12 +43,14 @@ end
 
 takeablock('method_arg') { |block_param| puts block_param } #=> "method_arg"
 
+# Sandwich code, returning how long it takes the passed in block to run.
+
 def time_entry
   time_before = Time.now
   yield
   time_after = Time.now
 
-  puts "It took #{time_after - time_before} seconds."
+  puts "It took #{time_after - time_before} seconds for the block to run."
 end
 
 time_entry do
@@ -52,3 +58,37 @@ time_entry do
   input = gets.chomp
   puts input
 end 
+
+usethisvar = "Hello world!"
+
+def usethevarmethod
+  puts "Will it be visible?"
+  yield
+  puts "... so?"
+end
+
+secondvar = "Second one!"
+thirdvar = '' # If thirdvar was not initialized here before the usertehvarmethod call on line 73, we'd raise an error.
+
+usethevarmethod { puts usethisvar + secondvar + thirdvar } #=> "Hello world!Secondone!"
+
+thirdvar = "numero three!"
+
+usethevarmethod { puts usethisvar + secondvar + thirdvar } #=> "Hello world!Second one!numero three!"
+
+# Blocks have binding scope, meaning that the scope that they bind to the scope that they are defined in. 
+
+def call_pro(proc)
+  proc.call
+end
+
+name = "Steve"
+chunk = Proc.new {puts "hi #{name}"}
+
+call_pro(chunk) #=> hi Steve
+
+name = "Dave"
+
+call_pro(chunk) #=> hi Dave # Proc is aware of the reassignment of `name`, even after the Proc is defined.
+
+=end
