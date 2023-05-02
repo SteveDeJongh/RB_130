@@ -127,4 +127,23 @@ p start2 #=> <Proc:encoding... review.rb:120> # note: This is a different, new p
 p start2.call #=> 1
 p start2 #=> Returns the same Proc object as 128
 
+# Passing in a Proc as a block to a method call
+
+# Problem
+def call_this
+  yield(2)
+end
+
+# Expected outcome:
+p call_this(&to_s) #=> 2
+p call_this(&to_i) #=> "2"
+
+# As we are not passing in the symbols `:to_s` and `to_i`, but instead variables, we can define these as custom Procs
+# before method invocation.
+
+to_i = Proc.new { |num| num.to_s }
+to_s = Proc.new { |num| num.to_i }
+
+# The `&` prepending the method argument at invocation time will turn the argumnent into a block.
+
 =end
