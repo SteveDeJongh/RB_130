@@ -146,4 +146,304 @@ to_s = Proc.new { |num| num.to_i }
 
 # The `&` prepending the method argument at invocation time will turn the argumnent into a block.
 
+##########################################################################################
+############################## RB 130 Study Questions ####################################
+##########################################################################################
+
+BLOCKS
+1, What are closures?
+
+- A closure is a generel programming concept that allows us to save chunks of code that
+- we can execute at a later time.
+
+2, What is binding?
+
+- A binding is the reference to the environment/surroudings in which a chunk of code (closure)
+- has been defined within. As closures are binding, they track the variables, methods, etc.
+- that are within scope at the time of definition. The chunks of code retain references to its surrounding
+- artifacts.
+
+3, How does binding affect the scope of closures?
+
+- Binding affects the scope of closures as these chunks of code have access to all surrounding
+- artifacts of where it was initially defined. This is important to remember when name
+- block parameter to avoid un intentional variable shadowing. Because of binding, closures
+- can also change the values of a variable in a different scope from where the block is executed.
+
+4, How do blocks work?
+
+- Every method in Ruby can take an implicit block. We can do so by defining the block as a `do..end`
+- or `{...}` block. To use the block, within the method definition we must `yield` to the block.
+- We can use `block_given?` to only `yield` to a block if one is passed in.
+
+5, When do we use blocks? (List the two reasons)
+
+We use a block to leave implementation details to the method user.
+
+Say we had a method to compare text before and after some operation was done, but that operation
+is left up the method caller.
+=end
+def compare(input)
+  first = input
+  second = yield if block_given?
+  puts "First: #{first} second: #{second}"
+end
+
+compare("Hello!") { "Hello!".upcase} #=> "first: Hello! second: HELLO!"
+compare("Hello!") { "boo"} #=> "first: Hello! second: boo"
+=begin
+
+Another time to use blocks would be track before and after block execution, tracking how long
+it takes for a block to execute is an example. Another good example is when you need to run some 
+set up and clean up operations before/after a block is executed, opening and closing a file
+for example.
+
+=end
+
+def track_time
+  start = Time.now
+  yield if block_given?
+  finish =  Time.now
+
+  puts "It took #{finish - start} seconds to run."
+end
+
+track_time do
+  puts "What's your name?"
+  answer = gets.chomp
+end
+
+#=> It took _____ seconds to run.
+
+=begin
+
+6, Describe the two reasons we use blocks, use examples.
+
+- We use blocks when we want to leave final implementation of the method to method invocation time
+- When we have methods that we want to perform some "before" and "after" actions, also known as
+- sandwhich code.
+
+7, When can you pass a block to a method? Why?
+
+8, How do we make a block argument manditory?
+
+9, How do methods access both implicit and explicit blocks passed in?
+
+10, What is yield in Ruby and how does it work?
+
+11, How do we check if a block is passed into a method?
+
+12, Why is it important to know that methods and blocks can return closures?
+
+13, What are the benifits of explicit blocks?
+
+14, Describe the arity differences of blocks, procs, methods and lambdas.
+
+15, What other differences are there between lambdas and procs? (might not be assessed on this, but good to know)
+
+16, What does & do when in a the method parameter?
+
+def method(&var); end
+17, What does & do when in a method invocation argument?
+
+method(&var)
+18, What is happening in the code below?
+
+arr = [1, 2, 3, 4, 5]
+
+p arr.map(&:to_s) # specifically `&:to_s`
+19, How do we get the desired output without altering the method or the method invocations?
+
+def call_this
+  yield(2)
+end
+
+# your code here
+
+p call_this(&to_s) # => returns 2
+p call_this(&to_i) # => returns "2"
+20, How do we invoke an explicit block passed into a method using &? Provide example.
+
+21, What concept does the following code demonstrate?
+
+def time_it
+  time_before = Time.now
+  yield
+  time_after= Time.now
+  puts "It took #{time_after - time_before} seconds."
+end
+22, What will be outputted from the method invocation block_method('turtle') below? Why does/doesn't it raise an error?
+
+def block_method(animal)
+  yield(animal)
+end
+
+block_method('turtle') do |turtle, seal|
+  puts "This is a #{turtle} and a #{seal}."
+end
+23, What will be outputted if we add the follow code to the code above? Why?
+
+block_method('turtle') { puts "This is a #{animal}."}
+24, What will the method call call_me output? Why?
+
+def call_me(some_code)
+  some_code.call
+end
+
+name = "Robert"
+chunk_of_code = Proc.new {puts "hi #{name}"}
+name = "Griffin"
+
+call_me(chunk_of_code)
+25, What happens when we change the code as such:
+
+def call_me(some_code)
+  some_code.call
+end
+
+chunk_of_code = Proc.new {puts "hi #{name}"}
+name = "Griffin"
+
+call_me(chunk_of_code)
+26, What will the method call call_me output? Why?
+
+def call_me(some_code)
+  some_code.call
+end
+
+name = "Robert"
+
+def name
+  "Joe"
+end
+
+chunk_of_code = Proc.new {puts "hi #{name}"}
+
+call_me(chunk_of_code)
+27, Why does the following raise an error?
+
+def a_method(pro)
+  pro.call
+end
+
+a = 'friend'
+a_method(&a)
+28, Why does the following code raise an error?
+
+def some_method(block)
+  block_given?
+end
+
+bl = { puts "hi" }
+
+p some_method(bl)
+29, Why does the following code output false?
+
+def some_method(block)
+  block_given?
+end
+
+bloc = proc { puts "hi" }
+
+p some_method(bloc)
+30, How do we fix the following code so the output is true? Explain
+
+def some_method(block)
+  block_given? # we want this to return `true`
+end
+
+bloc = proc { puts "hi" } # do not alter this code
+
+p some_method(bloc)
+31, How does Kernel#block_given? work?
+
+32, Why do we get a LocalJumpError when executing the below code? & How do we fix it so the output is hi? (2 possible ways)
+
+def some(block)
+  yield
+end
+
+bloc = proc { p "hi" } # do not alter
+
+some(bloc)
+33, What does the following code tell us about lambda's? (probably not assessed on this but good to know)
+
+bloc = lambda { p "hi" }
+
+bloc.class # => Proc
+bloc.lambda? # => true
+
+new_lam = Lambda.new { p "hi, lambda!" } # => NameError: uninitialized constant Lambda
+34, What does the following code tell us about explicitly returning from proc's and lambda's? (once again probably not assessed on this, but good to know ;)
+
+def lambda_return
+  puts "Before lambda call."
+  lambda {return}.call
+  puts "After lambda call."
+end
+
+def proc_return
+  puts "Before proc call."
+  proc {return}.call
+  puts "After proc call."
+end
+
+lambda_return #=> "Before lambda call."
+              #=> "After lambda call."
+
+proc_return #=> "Before proc call."
+35, What will #p output below? Why is this the case and what is this code demonstrating?
+
+def retained_array
+  arr = []
+  Proc.new do |el|
+    arr << el
+    arr
+  end
+end
+
+arr = retained_array
+arr.call('one')
+arr.call('two')
+p arr.call('three')
+TESTING WITH MINITEST
+36, What is a test suite?
+
+37, What is a test?
+
+38, What is an assertion?
+
+39, What do testing framworks provide?
+
+40, What are the differences of Minitest vs RSpec
+
+41, What is Domain Specific Language (DSL)?
+
+42, What is the difference of assertion vs refutation methods?
+
+43, How does assert_equal compare its arguments?
+
+44, What is the SEAT approach and what are its benefits?
+
+45, When does setup and tear down happen when testing?
+
+46, What is code coverage?
+
+47, What is regression testing?
+
+CORE TOOLS
+48, What are the purposes of core tools?
+
+49, What are RubyGems and why are they useful?
+
+50, What are Version Managers and why are they useful?
+
+51, What is Bundler and why is it useful?
+
+52, What is Rake and why is it useful?
+
+53, What constitues a Ruby project?
+
+
+
 =end
