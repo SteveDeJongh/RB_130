@@ -307,6 +307,10 @@ Methods and lambdas have strict arity, meaning they will raise an error if the n
 
 15, What other differences are there between lambdas and procs? (might not be assessed on this, but good to know)
 
+Procs have lenient arity while lambda's use strict arity.
+The return statement in a lambda stop the lambda and returns control to the calling code, The return statement in a proc
+returns from both the proc and the calling code.
+
 16, What does & do when in a the method parameter?
 
 def method(&var); end
@@ -361,6 +365,8 @@ p call_this(&to_i) # => returns "2"
 
 20, How do we invoke an explicit block passed into a method using &? Provide example.
 
+To invoke a explicit block passed in to a method, we have to invoke `call` on the method parameter.
+
 21, What concept does the following code demonstrate?
 
 def time_it
@@ -369,6 +375,9 @@ def time_it
   time_after= Time.now
   puts "It took #{time_after - time_before} seconds."
 end
+
+This demonstrates sandwich code, performing some `before` block execution and `after` block execution actions.
+
 22, What will be outputted from the method invocation block_method('turtle') below? Why does/doesn't it raise an error?
 
 def block_method(animal)
@@ -378,10 +387,15 @@ end
 block_method('turtle') do |turtle, seal|
   puts "This is a #{turtle} and a #{seal}."
 end
-23, What will be outputted if we add the follow code to the code above? Why?
 
-block_method('turtle') { puts "This is a #{animal}."}
-24, What will the method call call_me output? Why?
+# outputs #=> "This is a turtle and a ." # block parameter `seal` is `nil` as `yield` only passed 1 argument.
+
+# 23, What will be outputted if we add the follow code to the code above? Why?
+
+# block_method('turtle') { puts "This is a #{animal}."} # Raises an undefined local variable `animal` error.
+# The method parameter `animals` is not visible within the block, and nor is it assigned to the block.
+
+# 24, What will the method call call_me output? Why?
 
 def call_me(some_code)
   some_code.call
@@ -391,7 +405,11 @@ name = "Robert"
 chunk_of_code = Proc.new {puts "hi #{name}"}
 name = "Griffin"
 
-call_me(chunk_of_code)
+call_me(chunk_of_code) #=> hi Griffin
+
+# As the `name` varaible is initialized before the `chunk_of_code` proc is created, the variable is within scope and the procs
+# `binding`. If `name = 'Robert'` was removed, this would raise a NameError, undefined local variable or method 'name`.
+
 25, What happens when we change the code as such:
 
 def call_me(some_code)
@@ -402,22 +420,29 @@ chunk_of_code = Proc.new {puts "hi #{name}"}
 name = "Griffin"
 
 call_me(chunk_of_code)
+
+# This raises a `NameError` due to `name` not being initialized before the Proc object was created.
+
 26, What will the method call call_me output? Why?
+
 
 def call_me(some_code)
   some_code.call
 end
 
-name = "Robert"
-
 def name
   "Joe"
 end
 
+name = "Robert"
+
 chunk_of_code = Proc.new {puts "hi #{name}"}
 
-call_me(chunk_of_code)
-27, Why does the following raise an error?
+call_me(chunk_of_code) #=> hi robert
+
+# As Ruby searches for matching variable names first, we find "Robert" and assign it within the block.
+
+# 27, Why does the following raise an error?
 
 def a_method(pro)
   pro.call
@@ -425,6 +450,9 @@ end
 
 a = 'friend'
 a_method(&a)
+
+# This will raise an error as Ruby is not able to convert a string to a block object. As `&a' is expecting a to be a proc.
+
 28, Why does the following code raise an error?
 
 def some_method(block)
@@ -434,6 +462,9 @@ end
 bl = { puts "hi" }
 
 p some_method(bl)
+
+# This raises an error because we can not assign blocks to a variable.
+
 29, Why does the following code output false?
 
 def some_method(block)
@@ -443,7 +474,11 @@ end
 bloc = proc { puts "hi" }
 
 p some_method(bloc)
-30, How do we fix the following code so the output is true? Explain
+
+# This outputs false as we are not passing in a block, but a proc object. If we wanted this to return true, we could append a block
+# after the argument.
+
+# 30, How do we fix the following code so the output is true? Explain
 
 def some_method(block)
   block_given? # we want this to return `true`
@@ -451,11 +486,20 @@ end
 
 bloc = proc { puts "hi" } # do not alter this code
 
-p some_method(bloc)
+p some_method(bloc, &bloc) #{ add a block here }
+
+# In order to still meet the argument requirements, we leave the passed in argument as is but add an implicit block after for
+# the block_given? call to return true.
+
+# We can also append the argument with an explicit `&bloc` argument, which converts the proc to a block, and returns true.
+
 31, How does Kernel#block_given? work?
 
-32, Why do we get a LocalJumpError when executing the below code? & How do we fix it so the output is hi? (2 possible ways)
+# Kernel#block_given? works by checking the method implementation for a passed in block. If it finds one, it returns true, otherwise
+# it returns false.
 
+32, Why do we get a LocalJumpError when executing the below code? & How do we fix it so the output is hi? (2 possible ways)
+=end
 def some(block)
   yield
 end
@@ -463,6 +507,16 @@ end
 bloc = proc { p "hi" } # do not alter
 
 some(bloc)
+
+# This results in a localjumperror as we are not passing in a block, but a proc object as the argument.
+
+# To fix this we can either:
+# append a & to both the parameter and the argument.
+# or we can use Proc#call instead of yield on line 500. `block.call`
+# or pass the block implicitely by adding { p "hi" } after the method arguments.
+
+=begin
+
 33, What does the following code tell us about lambda's? (probably not assessed on this but good to know)
 
 bloc = lambda { p "hi" }
@@ -471,6 +525,10 @@ bloc.class # => Proc
 bloc.lambda? # => true
 
 new_lam = Lambda.new { p "hi, lambda!" } # => NameError: uninitialized constant Lambda
+
+# The code tells us that we use different syntax when creating a Lambda, and that Lambda.new can not be called.
+# it also shows that a lambda is a type of the proc class.
+
 34, What does the following code tell us about explicitly returning from proc's and lambda's? (once again probably not assessed on this, but good to know ;)
 
 def lambda_return
