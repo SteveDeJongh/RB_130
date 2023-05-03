@@ -198,8 +198,6 @@ it takes for a block to execute is an example. Another good example is when you 
 set up and clean up operations before/after a block is executed, opening and closing a file
 for example.
 
-=end
-
 def track_time
   start = Time.now
   yield if block_given?
@@ -215,8 +213,6 @@ end
 
 #=> It took _____ seconds to run.
 
-=begin
-
 6, Describe the two reasons we use blocks, use examples.
 
 - We use blocks when we want to leave final implementation of the method to method invocation time
@@ -225,17 +221,65 @@ end
 
 7, When can you pass a block to a method? Why?
 
+- We can pass a block to a method whenever we want, as all methods take a implicit block.
+
+- All methods regardless of it definiton, take an implicit block. It may ignore it, but still accepts it.
+- Blocks can also be passed in via an explicit block parameter ( a parameter name starting with the &)
+
 8, How do we make a block argument manditory?
+
+- To make a block argument manditory, we must explicitely request one in the method's parameter definitons
+- by appending the & to a parameter name. The `&` before the parameter name takes the block
+- and converts it to a Proc object.
+
+=end
+
+def explicit(&givemeablock)
+  givemeablock.call
+  givemeablock.call
+end
+
+explicit { puts "hello world!"}  #=> hello world! x 2
+
+=begin
 
 9, How do methods access both implicit and explicit blocks passed in?
 
+  Methods access implicit blocks by yielding to them, and explicit blocks by calling the block name.
+
+=end
+
+def implicit
+  yield
+end
+
+implicit { puts "Yielding to implicit block!"}
+
+def explicit_block(&explicit)
+  explicit.call
+end
+
+explicit_block { puts "From the explicit block!" }
+
+=begin
+
 10, What is yield in Ruby and how does it work?
+
+`Yield` is a ruby keyword, and diverts method execution to the passed in block as method invocation time.
 
 11, How do we check if a block is passed into a method?
 
+To check if block is passed in to a method, we can use block_given? witch returns true or false depending on if a block
+is passed in.
+
 12, Why is it important to know that methods and blocks can return closures?
 
+
+
 13, What are the benifits of explicit blocks?
+
+Explicit blocks have the benefit of beign attached to a name within the method. This lets it be re-assigned, passed to another method
+or invoked multiple times. 
 
 14, Describe the arity differences of blocks, procs, methods and lambdas.
 
