@@ -499,7 +499,7 @@ p some_method(bloc, &bloc) #{ add a block here }
 # it returns false.
 
 32, Why do we get a LocalJumpError when executing the below code? & How do we fix it so the output is hi? (2 possible ways)
-=end
+
 def some(block)
   yield
 end
@@ -514,8 +514,6 @@ some(bloc)
 # append a & to both the parameter and the argument.
 # or we can use Proc#call instead of yield on line 500. `block.call`
 # or pass the block implicitely by adding { p "hi" } after the method arguments.
-
-=begin
 
 33, What does the following code tell us about lambda's? (probably not assessed on this but good to know)
 
@@ -547,8 +545,12 @@ lambda_return #=> "Before lambda call."
               #=> "After lambda call."
 
 proc_return #=> "Before proc call."
-35, What will #p output below? Why is this the case and what is this code demonstrating?
 
+When we call `return` with from a lambda, we only return from the lambda and not the calling code, when we return from a proc,
+we also return from the calling code.
+
+35, What will #p output below? Why is this the case and what is this code demonstrating?
+=end
 def retained_array
   arr = []
   Proc.new do |el|
@@ -561,6 +563,17 @@ arr = retained_array
 arr.call('one')
 arr.call('two')
 p arr.call('three')
+
+# returns an array ['one', 'two', 'three']
+
+# This code demonstrates that closures are binding. As the proc returned from retained array and assigned to `arr` maintains
+# reference to the variables inside of `retained_array`, the array being built and returned by the proc is the same array,
+# keeps adding the string arguments passed to each call of the proc.
+
+# On each execution of the proc, the argument passed to call is assigned to block parameter `el` which gets added to `arr`
+
+=begin
+
 TESTING WITH MINITEST
 36, What is a test suite?
 
