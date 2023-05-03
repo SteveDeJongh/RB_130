@@ -274,7 +274,26 @@ is passed in.
 
 12, Why is it important to know that methods and blocks can return closures?
 
+As a closure is binding, the return closure from a method or block will maintain a copy of it's environment and artifacts, and 
+on every subsequent call of the returned closure, it will be working with that environment.
 
+Take the following:
+=end
+
+def keep_increasing
+  count = 0
+  Proc.new { count += 1 }
+end
+
+val1 = keep_increasing
+p val1 #=> <Proc:encoding...>
+p val1.call #=> 1
+p val1.call #=> 2
+
+val2 = keep_increasing
+p val2.call #=> 1 # new proc object created from the initial environment in keep_increasing
+
+=begin
 
 13, What are the benifits of explicit blocks?
 
@@ -283,29 +302,63 @@ or invoked multiple times.
 
 14, Describe the arity differences of blocks, procs, methods and lambdas.
 
+Blocks and Procs have lenient arity, meaning that they wont complain if too few or too many arguments are passed in.
+Methods and lambdas have strict arity, meaning they will raise an error if the number of arguments does not line up.
+
 15, What other differences are there between lambdas and procs? (might not be assessed on this, but good to know)
 
 16, What does & do when in a the method parameter?
 
 def method(&var); end
+
+The `&` ahead of a method parameter at method definition tells the method to assign the passed in block to this parameter name.
+The block is converted to a simple `proc` objet and assigned tied to the name.
+
 17, What does & do when in a method invocation argument?
 
 method(&var)
+
+At method invocation, the & tells ruby to convert the passed in proc to a block, and pass the block in.
+
+Example:
+
+=end
+
+def output
+  yield("output")
+end
+
+cap = :capitalize.to_proc # uses symbol#to_proc, to convert the symbol to a proc.
+
+p output(&cap) #=> Output # Not the uppercase O, ruby converts the passed in the proc to a block, which is yielded to in the method definition.
+
+=begin
+
 18, What is happening in the code below?
 
 arr = [1, 2, 3, 4, 5]
 
 p arr.map(&:to_s) # specifically `&:to_s`
-19, How do we get the desired output without altering the method or the method invocations?
 
+Ruby first tries to convert the `:to_s` to a block, but as it's not a Proc, we first call `Symbol#to_proc`. Now that it's a Proc,
+ruby then converts this proc to a block.
+
+19, How do we get the desired output without altering the method or the method invocations?
+=end
 def call_this
   yield(2)
 end
 
 # your code here
 
+to_s = Proc.new { |num| num.to_i }
+to_i = Proc.new { |num| num.to_s }
+
 p call_this(&to_s) # => returns 2
 p call_this(&to_i) # => returns "2"
+
+=begin
+
 20, How do we invoke an explicit block passed into a method using &? Provide example.
 
 21, What concept does the following code demonstrate?
