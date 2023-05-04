@@ -3,6 +3,9 @@
 =begin
 Written assessment only
 Assessment has roughly 20 questions plus the coding challenge.
+Coding challenge same style as the practice problems/coding challenges. Important to check test cases for any
+implicit requirements not listed explicitely. Prepare to spend up to an hour on the coding challenge. Recommended to do
+10 practice problems from the easy set, and at least 3 from the medium set.
 4 hours to complete test
 
 Topics covered:
@@ -636,6 +639,8 @@ Using tests to identify these bugs means we don't have to verify that everything
 
 CORE TOOLS
 48, What are the purposes of core tools?
+
+The purpose of core tools is to assist in the building of professional, ready for distribution Ruby projects.
 
 49, What are RubyGems and why are they useful?
 

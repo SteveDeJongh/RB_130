@@ -18,15 +18,14 @@ class Anagram
         let = x.downcase
         curr.downcase.count(let) == word.count(let)
       end &&
-      curr.downcase != word &&
-      curr.size == word.size
+        curr.downcase != word &&
+        curr.size == word.size
     end
   end
 
   private
 
   attr_reader :word
-
 end
 
 # detector = Anagram.new('galea')
