@@ -577,17 +577,38 @@ p arr.call('three')
 TESTING WITH MINITEST
 36, What is a test suite?
 
+A test suite is the entire set of tests that accompanies tour program or application. This can be thought of all the 
+tests for a project.
+
 37, What is a test?
+
+This describes a sitaution or context in which tests are run. For example, a test about making sure an error message is
+returned after trying to log in with teh wrong password. A test can ocntain multiple assertions.
 
 38, What is an assertion?
 
+An assertion is the actual verification step to confirm the data returned by your program is indeed what is expected.
+A test can contain one or more assertions.
+
 39, What do testing framworks provide?
+
+The main benefit of using a testing framework is to prevent regression. When we make changes to our code, we want to ensure
+that these changes do not negatively impact the rest of our code or break some functionality.
 
 40, What are the differences of Minitest vs RSpec
 
+RSpec exclusively uses expectation style syntax, while Minitest can use either assert-style or expecatation style. Minitest
+is Ruby's default testing library despite many people using RSpec.
+
 41, What is Domain Specific Language (DSL)?
 
+A domain specific language is a language with a higher lever of abstraction which is optimized for the specific class of problems.
+A DSL reads more like plain english that code.
+
 42, What is the difference of assertion vs refutation methods?
+
+Assertion methods are those which ensure that the output matches the passed in expected result.
+Refutation methods that ensure that the ouput DOES NOT match the passed in result.
 
 43, How does assert_equal compare its arguments?
 
