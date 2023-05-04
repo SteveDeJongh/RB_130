@@ -5,7 +5,8 @@
 
 We will be given two strands of DNA.
 We need to count the differences between them.
-If one strand is shorter than the other, we only need to check for differences for the length of the shorter strand.
+If one strand is shorter than the other, we only need to check for differences
+for the length of the shorter strand.
 
 =end
 
@@ -17,7 +18,7 @@ class DNA
   end
 
   def hamming_distance(comp_strand)
-    comps = [strand, comp_strand].sort_by { |x| x.length}
+    comps = [strand, comp_strand].sort_by(&:length)
     distance = 0
     comps[0].chars.each_with_index do |char, idx|
       distance += char != comps[1][idx] ? 1 : 0

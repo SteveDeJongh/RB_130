@@ -1,5 +1,6 @@
 ##### RB 130 Challenges Roman Numerals #####
 
+# rubocop:disable all
 =begin
 Problem:
 Roman numerals:
@@ -36,19 +37,25 @@ ensure this is in descending order.
 Method:
 initilaize a varible with an empty string
 iterate over the roman numerals collection:
-  if the numeric value of the current Roman numerial is less than the value of the input number, add the roman
-  numerlas to the string as many times as its value can fit. For instnace, if the current roman numeral is C (Which is 100),
+  if the numeric value of the current Roman numerial is less than the value of the input
+     number, add the roman
+  numerlas to the string as many times as its value can fit. For instnace, if the current
+   roman numeral is C (Which is 100),
   and the input number is 367, then 3 C's are needed: CCC.
 
-  Subtract the numeric value of the added Roman numerals from the current inptu value, and use the input value in subsequent iterations.
-  For instance, since we added CCC to the string above, we must subtract 300 from 367, leaving us with a new input number 67.
+  Subtract the numeric value of the added Roman numerals from the current inptu value, 
+  and use the input value in subsequent iterations.
+  For instance, since we added CCC to the string above, we must subtract 300 from 367,
+   leaving us with a new input number 67.
 
 return result string.
 
 =end
+# rubocop:enable all
 
-NUMERALS = {"M" => 1000, "CM" => 900, "D" => 500, "CD" => 400, "C" => 100, "XC" => 90, "L" => 50, "XL" => 40,
-            "X" => 10, "IX" => 9, "V" => 5, "IV" => 4, "I" => 1}
+NUMERALS = { "M" => 1000, "CM" => 900, "D" => 500, "CD" => 400, "C" => 100,
+             "XC" => 90, "L" => 50, "XL" => 40, "X" => 10, "IX" => 9,
+             "V" => 5, "IV" => 4, "I" => 1 }
 
 class RomanNumeral
   attr_reader :number
@@ -57,7 +64,7 @@ class RomanNumeral
     @number = num
   end
 
-  def to_roman
+  def to_roman # doesn't pass metrics/methodlength cop.
     result = ""
     curr_num = number
     NUMERALS.each do |k, v|
@@ -69,7 +76,6 @@ class RomanNumeral
       end
       curr_num = num
     end
-
     result
   end
 
