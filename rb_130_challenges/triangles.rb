@@ -2,23 +2,23 @@
 
 class Triangle
   def initialize(side1, side2, side3)
-    @sides = [side1, side2, side3]
+    @sides = [side1, side2, side3].sort
     raise ArgumentError unless legal?
   end
 
   def kind
-    sides = @sides.sort
+    sides = @sides
     return "equilateral" if sides[0] == sides[1] && sides[0] == sides[2]
-    return "isosceles" if sides[0] == sides[1] || sides[0] == sides[2] || sides[1] == sides[2]
-    return "scalene" if sides[0] != sides[1] && sides[0] != sides[2] && sides[1] != sides[2]  
+    return "isosceles" if sides.uniq.size == 2
+    "scalene"
   end
 
   private
 
   def legal?
-    sides = @sides.sort
+    sides = @sides
     return false if (sides[0] + sides[1]) <= sides[2]
-    return false if sides.any? {|side| side <= 0.0}
+    return false if sides.any? { |side| side <= 0.0 }
     true
   end
 end
@@ -26,7 +26,7 @@ end
 =begin
 
 # Launch School solution
-  
+
 class Triangle
   attr_reader :sides
 
