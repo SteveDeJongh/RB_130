@@ -612,27 +612,58 @@ Refutation methods that ensure that the ouput DOES NOT match the passed in resul
 
 43, How does assert_equal compare its arguments?
 
+Assert equal uses `==` to compare the two arguments and uses the return value of `==` to return a pass or fail.
+
 44, What is the SEAT approach and what are its benefits?
+
+The SEAT approach is where we; set up the neccesary objects using a setup method, execute the code against the object were testing,
+assert that hte excuted code did the right thing, and then tearing down and cleaning up any lingering artifacts using a `teardown`
+method.
 
 45, When does setup and tear down happen when testing?
 
+Set up occurs before each test, and teardown occurs after each test.
+
 46, What is code coverage?
 
+Code coverage is the measurement of how much of our actual program is tested by a test suite. Code coverage is measured
+by how many of our methods are covered in testing, all methods are included in this calculation and not just public methods.
+
 47, What is regression testing?
+
+Regression tests check for bugs that occur in formerly working code after you make changes somewhere in the codebase.
+Using tests to identify these bugs means we don't have to verify that everything works manually after each change.
 
 CORE TOOLS
 48, What are the purposes of core tools?
 
 49, What are RubyGems and why are they useful?
 
+Ruby Gems are packages of code that yoy cna download, install, and use in you rRuby programs or from the command line.
+The gems allow us to easily add more funcitonality to our programs quickly.
+
 50, What are Version Managers and why are they useful?
+
+Ruby version managers are programs that let you install, manage, and use different versions of Ruby. Rbenv, and RVM are 
+examples of different ruby version managers.
 
 51, What is Bundler and why is it useful?
 
+Bundler is a gem for ruby that is a dependency manager used to configure which ruby and which gems each of your projects need.
+
+Bundler relies on a Gemfile to tell it which version of Ruby and its Gems it should use. This file is a simple Ruby program
+that uses a DSL to provide detailsa bout the Ruyb and Gem versions.
+
+When you run `bundle install`, bundler creates a `gemfile.lock` in your project directory.
+
 52, What is Rake and why is it useful?
+
+Rake is a ruby gem that automates many common funcitons required to build, test,a nd install programs. It's part of
+every modern installation of Ruby.
 
 53, What constitues a Ruby project?
 
-
+A ruby project is/are programs and libraries that make use of Ruby as the primary development language. Each ruby project
+is typically designed to use a specific version of Ruby, and may alos use a variety of different Gems.
 
 =end
