@@ -3,7 +3,8 @@
 =begin
 
 Input: String of digits, and length
-Output: all possible conescutive number series of a specified length, inthe form of a nested array
+Output: all possible conescutive number series of a specified length,
+inthe form of a nested array
   of single digits. ie: ('1234', 2') = [[1,2],[2,3],[3,4]]
 
 Raise an error if asked for a series longer than the input string
@@ -30,9 +31,9 @@ class Series
     #   idx += 1
     # end
     # result
-    digits.each_cons(count).to_a # Much cleaner way to create the consecutive number arrays.
+    digits.each_cons(count).to_a
+    # Much cleaner way to create the consecutive number arrays.
   end
-
 end
 
 # dig = Series.new('1234')
