@@ -169,8 +169,8 @@ BLOCKS
 3, How does binding affect the scope of closures?
 
 - Binding affects the scope of closures as these chunks of code have access to all surrounding
-- artifacts of where it was initially defined. This is important to remember when name
-- block parameter to avoid un intentional variable shadowing. Because of binding, closures
+- artifacts of where it was initially defined. This is important to remember when naming
+- block parameter to avoid unintentional variable shadowing. Because of binding, closures
 - can also change the values of a variable in a different scope from where the block is executed.
 
 4, How do blocks work?
@@ -248,7 +248,8 @@ explicit { puts "hello world!"}  #=> hello world! x 2
 
 9, How do methods access both implicit and explicit blocks passed in?
 
-  Methods access implicit blocks by yielding to them, and explicit blocks by calling the block name.
+  Methods access implicit blocks by yielding to them, and explicit blocks by calling the blockm which has been turned into a
+  named proc.
 
 =end
 
@@ -263,6 +264,20 @@ def explicit_block(&explicit)
 end
 
 explicit_block { puts "From the explicit block!" }
+
+# For a method to take an explicit and implicit closure, we pass in a proc and an implicit block.
+
+p1 = Proc.new { puts "Hello from the passed in proc! I didn't do anything with the yield return value"}
+p2 = Proc.new { |blah| puts "Can we yield from a proc? #{blah}"}
+
+def double_wammy(block)
+  block.call(yield) # we can pass return value of yield to an argument to pass to the block.
+  puts yield # We can yield to the same block multiple times
+end
+
+double_wammy(p1) { "what uppppp" }
+double_wammy(p2) { "and then hello from the implicit block!"}
+
 
 =begin
 
@@ -672,3 +687,19 @@ A ruby project is/are programs and libraries that make use of Ruby as the primar
 is typically designed to use a specific version of Ruby, and may alos use a variety of different Gems.
 
 =end
+
+def some_method
+  "From some method!"
+end
+
+var1 = "hello"
+
+proc1 = Proc.new { puts var1 + " " + some_method }
+
+proc1.call
+
+def another_method(p1)
+  p1.call
+end
+
+another_method(proc1)
