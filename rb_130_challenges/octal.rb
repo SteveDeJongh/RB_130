@@ -6,7 +6,8 @@ Problem:
 Convert Octal number to decimal number.
 valid digits only contain numbers from 0-7
 
-To convert octal to decimal, each digit is multiplied by 8 to the exponent of their position in the
+To convert octal to decimal, each digit is multiplied by 8 to the exponent of
+ their position in the
 digit less 1.
 
 #Octal::to_decimal
@@ -30,7 +31,8 @@ class Octal
   def to_decimal
     digits = octal.chars.reverse
     return 0 if invalid_octal?(digits) # Moved code to a helper method.
-    # return 0 if digits.any?{|x| x=~ /[a-zA-Z89]/ } # Checking for invalid characters/digits
+    # return 0 if digits.any?{|x| x=~ /[a-zA-Z89]/ }
+    # Checking for invalid characters/digits
     digits.map.with_index do |dig, idx|
       dig.to_i * (8**idx)
     end.sum
@@ -38,8 +40,8 @@ class Octal
 
   private
 
-  def invalid_octal?(num)
-    num.any?{|x| x=~ /[a-zA-Z89]/ }
+  def invalid_octal?(digits)
+    digits.any? { |dig| dig =~ /[a-zA-Z89]/ }
   end
 end
 

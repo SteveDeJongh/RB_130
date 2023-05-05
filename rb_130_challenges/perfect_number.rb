@@ -21,6 +21,8 @@ class PerfectNumber
   def self.classify(num)
     check = PerfectNumber.new(num)
 
+    checknum = check.number
+
     aliquot = check.even_divisors
 
     determine(aliquot, checknum)
