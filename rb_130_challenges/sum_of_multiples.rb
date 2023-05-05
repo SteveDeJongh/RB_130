@@ -12,20 +12,17 @@ sum numbers
 
 class SumOfMultiples
   attr_reader :multiples
-  # @@defaults = [3,5] # Class variable no needed with constructor able to accept many/no arguments.
+
+  # @@defaults = [3,5] # Class variable no needed with constructor
+  # able to accept many/no arguments.
 
   def initialize(*multiples)
-    @multiples = (multiples.size > 0) ? multiples : [3,5]
+    @multiples = multiples.empty? ? multiples : [3, 5]
   end
 
   def to(num)
-    (0..(num-1)).to_a.map do |curr|
-      @multiples.any? {|x| curr % x == 0} ? curr : 0
-      # if @multiples.any? {|x| curr % x == 0}
-      #   curr
-      # else
-      #   0
-      # end
+    (0...num).select do |curr| # using range `...` (up to but not including)
+      @multiples.any? { |x| curr % x == 0 }
     end.sum
   end
 
