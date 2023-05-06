@@ -42,15 +42,15 @@ class CustomSet
   end
 
   def contains?(el)
-    @set.any? { |x| x == el }
+    @set.include?(el)
   end
 
   def subset?(otherset)
-    @set.all? { |x| otherset.set.include?(x) }
+    @set.all? { |x| otherset.contains?(x) }
   end
 
   def disjoint?(otherset)
-    set.none? { |x| otherset.set.include?(x) }
+    set.none? { |x| otherset.contains?(x) }
   end
 
   def eql?(otherset)
@@ -66,7 +66,7 @@ class CustomSet
   end
 
   def intersection(otherset)
-    result = set.select { |x| otherset.set.include?(x) }
+    result = set.select { |x| otherset.contains?(x) }
     CustomSet.new(result)
   end
 
