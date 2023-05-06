@@ -26,7 +26,8 @@ class Clock
   attr_accessor :time
 
   def initialize(hours, min)
-    @time = "#{"%02d" % hours}:#{"%02d" % min}" # format output to include leading 0's.
+    @time = "#{format('%02d', hours)}:#{format('%02d', min)}"
+    # format output to include leading 0's.
   end
 
   def self.at(hours, min = "00")
@@ -34,7 +35,7 @@ class Clock
   end
 
   def +(minutes)
-    local_time = self.time
+    local_time = time
     hr, min = local_time.split(':').map(&:to_i)
     inchr, incmn = (minutes + min).divmod(60)
     _, inchr = (hr + inchr).divmod(24)
@@ -47,13 +48,12 @@ class Clock
   end
 
   def ==(other)
-    self.time == other.time
+    time == other.time
   end
 
   def to_s
-    self.time
+    time
   end
-
 end
 
 # LS Solution
@@ -113,3 +113,72 @@ end
 #   end
 # end
 
+###################################################################
+################################# Revisit #########################
+###################################################################
+=begin
+Start: 00:13
+End: :47
+
+Problem:
+Be able to add minutes to time represented by a given clock
+Be able to subtract minutes from time represented by a given clock
+In both cases, return a new clock object and don't mutate the object
+two clock object that represent the same time should be equal
+
+Class: Clock
+
+Class methods:
+at(hour, optional minutes
+
+Instance methods:
++ (minutes)
+- (minutes)
+to_s
+== (other clock)
+
+=end
+
+class Clock
+  attr_reader :hours, :minutes
+
+  DAY_MINUTES = 24 * 60
+
+  def initialize(hrs, min)
+    @hours = hrs
+    @minutes = min
+  end
+
+  def self.at(hrs, min = 0)
+    new(hrs, min)
+  end
+
+  def +(mins)
+    total_mins = ((hours * 60) + minutes + mins) % DAY_MINUTES
+    hr, mn = total_mins.divmod(60)
+    Clock.new(hr, mn)
+  end
+
+  def -(mins)
+    total_mins = ((hours * 60) + minutes - mins) % DAY_MINUTES
+    hr, mn = total_mins.divmod(60)
+    Clock.new(hr, mn)
+  end
+
+  def to_s
+    "#{format('%02d', hours)}:#{format('%02d', minutes)}"
+  end
+
+  def ==(other)
+    hours == other.hours && minutes == other.minutes
+  end
+end
+
+clock = Clock.at(9, 20)
+clock2 = Clock.at(9, 20)
+
+p clock
+p clock + 1900
+puts clock
+
+p clock == clock2
