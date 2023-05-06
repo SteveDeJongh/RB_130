@@ -185,7 +185,7 @@ We use a block to leave implementation details to the method user.
 
 Say we had a method to compare text before and after some operation was done, but that operation
 is left up the method caller.
-=end
+
 def compare(input)
   first = input
   second = yield if block_given?
@@ -194,7 +194,7 @@ end
 
 compare("Hello!") { "Hello!".upcase} #=> "first: Hello! second: HELLO!"
 compare("Hello!") { "boo"} #=> "first: Hello! second: boo"
-=begin
+
 
 Another time to use blocks would be track before and after block execution, tracking how long
 it takes for a block to execute is an example. Another good example is when you need to run some 
@@ -235,8 +235,6 @@ end
 - by appending the & to a parameter name. The `&` before the parameter name takes the block
 - and converts it to a Proc object.
 
-=end
-
 def explicit(&givemeablock)
   givemeablock.call
   givemeablock.call
@@ -244,14 +242,10 @@ end
 
 explicit { puts "hello world!"}  #=> hello world! x 2
 
-=begin
-
 9, How do methods access both implicit and explicit blocks passed in?
 
   Methods access implicit blocks by yielding to them, and explicit blocks by calling the blockm which has been turned into a
   named proc.
-
-=end
 
 def implicit
   yield
@@ -296,7 +290,6 @@ As a closure is binding, the return closure from a method or block will maintain
 on every subsequent call of the returned closure, it will be working with that environment.
 
 Take the following:
-=end
 
 def keep_increasing
   count = 0
@@ -310,8 +303,6 @@ p val1.call #=> 2
 
 val2 = keep_increasing
 p val2.call #=> 1 # new proc object created from the initial environment in keep_increasing
-
-=begin
 
 13, What are the benifits of explicit blocks?
 
@@ -344,8 +335,6 @@ At method invocation, the & tells ruby to convert the passed in proc to a block,
 
 Example:
 
-=end
-
 def output
   yield("output")
 end
@@ -353,8 +342,6 @@ end
 cap = :capitalize.to_proc # uses symbol#to_proc, to convert the symbol to a proc.
 
 p output(&cap) #=> Output # Not the uppercase O, ruby converts the passed in the proc to a block, which is yielded to in the method definition.
-
-=begin
 
 18, What is happening in the code below?
 
@@ -366,7 +353,7 @@ Ruby first tries to convert the `:to_s` to a block, but as it's not a Proc, we f
 ruby then converts this proc to a block.
 
 19, How do we get the desired output without altering the method or the method invocations?
-=end
+
 def call_this
   yield(2)
 end
@@ -378,8 +365,6 @@ to_i = Proc.new { |num| num.to_s }
 
 p call_this(&to_s) # => returns 2
 p call_this(&to_i) # => returns "2"
-
-=begin
 
 20, How do we invoke an explicit block passed into a method using &? Provide example.
 
@@ -568,7 +553,7 @@ When we call `return` with from a lambda, we only return from the lambda and not
 we also return from the calling code.
 
 35, What will #p output below? Why is this the case and what is this code demonstrating?
-=end
+
 def retained_array
   arr = []
   Proc.new do |el|
@@ -589,8 +574,6 @@ p arr.call('three')
 # keeps adding the string arguments passed to each call of the proc.
 
 # On each execution of the proc, the argument passed to call is assigned to block parameter `el` which gets added to `arr`
-
-=begin
 
 TESTING WITH MINITEST
 36, What is a test suite?
@@ -686,8 +669,6 @@ every modern installation of Ruby.
 A ruby project is/are programs and libraries that make use of Ruby as the primary development language. Each ruby project
 is typically designed to use a specific version of Ruby, and may alos use a variety of different Gems.
 
-=end
-
 def some_method
   "From some method!"
 end
@@ -703,3 +684,42 @@ def another_method(p1)
 end
 
 another_method(proc1)
+
+# Group 1
+my_proc = proc { |thing| puts "This is a #{thing}." }
+puts my_proc
+puts my_proc.class
+my_proc.call
+my_proc.call('cat')
+
+=end
+
+# Group 2
+my_lambda = lambda { |thing| puts "This is a #{thing}." }
+my_second_lambda = -> (thing) { puts "This is a #{thing}." }
+puts my_lambda
+puts my_second_lambda
+puts my_lambda.class
+my_lambda.call('dog')
+my_second_lambda.call('thing')
+# my_lambda.call
+# my_third_lambda = Lambda.new { |thing| puts "This is a #{thing}." }
+
+# Group 3
+def block_method_1(animal)
+  yield
+end
+
+block_method_1('seal') { |seal| puts "This is a #{seal}."}
+# block_method_1('seal')
+
+# Group 4
+def block_method_2(animal)
+  yield(animal)
+end
+
+block_method_2('turtle') { |turtle| puts "This is a #{turtle}."}
+block_method_2('turtle') do |turtle, seal|
+  puts "This is a #{turtle} and a #{seal}."
+end
+block_method_2('turtle') { puts "This is a #{animal}."}
