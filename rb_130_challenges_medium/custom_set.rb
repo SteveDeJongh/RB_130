@@ -33,7 +33,8 @@ class CustomSet
   attr_reader :set
 
   def initialize(arr = [])
-    @set = arr
+    @set = arr.uniq
+    # Array#uniq on the passed in arr as a set must only contain unique elmnts.
   end
 
   def empty?
@@ -53,7 +54,7 @@ class CustomSet
   end
 
   def eql?(otherset)
-    return false if set.empty? && !otherset.set.empty?
+    return false unless set.size == otherset.set.size
     subset?(otherset)
   end
 
