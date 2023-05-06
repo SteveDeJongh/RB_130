@@ -43,9 +43,7 @@ class Meetup
   end
 
   def whichday(day)
-    working_day = day.capitalize
-
-    case working_day
+    case day.capitalize
     when "Monday"    then 1
     when "Tuesday"   then 2
     when "Wednesday" then 3
@@ -56,9 +54,8 @@ class Meetup
     end
   end
 
-  def startday(itt)
-    itt = itt.capitalize
-    case itt
+  def startday(itt) # rubocop:disable Metrics/CyclomaticComplexity
+    case itt.capitalize
     when "First"    then 1
     when "Second"   then 8
     when "Third"    then 15
