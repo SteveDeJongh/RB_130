@@ -692,8 +692,6 @@ puts my_proc.class
 my_proc.call
 my_proc.call('cat')
 
-=end
-
 # Group 2
 my_lambda = lambda { |thing| puts "This is a #{thing}." }
 my_second_lambda = -> (thing) { puts "This is a #{thing}." }
@@ -723,3 +721,21 @@ block_method_2('turtle') do |turtle, seal|
   puts "This is a #{turtle} and a #{seal}."
 end
 block_method_2('turtle') { puts "This is a #{animal}."}
+
+=end
+
+=begin
+def a_method
+  yield
+end
+
+a_proc = proc { puts 'Hello!' }
+
+a_method(&a_proc)
+
+def a_method2(&arg1)
+  arg1.call
+end
+
+a_method2 { puts 'Hello!' }
+=end
