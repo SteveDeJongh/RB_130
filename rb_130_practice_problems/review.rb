@@ -738,4 +738,73 @@ def a_method2(&arg1)
 end
 
 a_method2 { puts 'Hello!' }
+
+def implicit(&block)
+  block.call(2)
+end
+
+p implicit(&:to_s)
+
+
+def too_few
+  yield("one")
+end
+
+too_few {|num1, num2| puts "#{num1} and #{num2}" } #=> "one and " # num2 is represented as `nil`.
+
+def too_many
+  yield('one', 'two', 'three')
+end
+
+too_many {|num1, num2| puts "#{num1} and #{num2}" } #=> "one and two" # Extra passed in argument is ignored.
+
+def a_method(arg1, arg2)
+  puts "#{arg1} and #{arg2}"
+end
+
+a_method('s1') # Argument Error: wrong number of argument (given 1, expected 2)
+
+def output_statement(preference)
+  preference.call
+end
+
+color = "red"
+preference = Proc.new {puts "My favorite color is #{color}"}
+color = "blue"
+
+output_statement(preference)
+
+an_object = Proc.new { puts "Hi, I'm 67 years old" }
+
+an_object.call # => Hi, I'm 67 years old
+
+def block_method
+  yield
+end
+
+block_method { puts 'from the passed in block!'}
+
+_________
+
+def explicit(&block)
+  block.call
+  puts "And i've actually been turned into a #{block.class}"
+end
+
+explicit do 
+  puts "From the explicit block!"
+end
+
+
+
+```ruby
+def implicit(&block)
+  block.call(2)
+end
+
+p implicit(&:to_s)
+```
+
+In this second example, when call the `implicit` method the first that occurs is that the `&` symbol before the passed in argument tells ruby to try to convert the passed in element to a block. As it is not yet a Proc object, ruby calls `Symbol#to_proc` on `:to_s`, and now that it is a proc it then gets converted a block and assigned to the implicit block parameter of `block`. Method execution then continues to `line 2` where we invoke `call` on `block`, and pass in the argument `2`. Execution continues then in the block where `to_s` is called on the passed in `2` element, and the string `"2"` is now returned from the block to the method.
+
 =end
