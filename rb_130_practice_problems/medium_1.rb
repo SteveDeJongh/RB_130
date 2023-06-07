@@ -218,3 +218,41 @@ bubble_sort!(array) { |first, second| first.downcase <= second.downcase }
 p array == %w(alice bonnie Kim Pete rachel sue Tyler)
 
 =end
+
+# class TextAnalyzer
+#   def process
+#     blah = File.open('txtfile.txt', 'r')
+#     yield(blah.read)
+#     blah.close
+#   end
+# end
+
+# analyzer = TextAnalyzer.new
+# analyzer.process { |text| puts "#{text.split("\n\n").count} paragraphs" }
+# analyzer.process { |text| puts "#{text.split("\n").count} lines" }
+# analyzer.process { |text| puts "#{text.split(' ').count} words" }
+
+# 2) Text Analyzer - Sandwich Code
+
+# file = File.open("txtfile.txt")
+
+# p file #=> <File:txtfile.txt>
+
+# filetext = file.read
+# p filetext (or called `read` called directly on file) #=> full text from file
+
+class TextAnalyzer
+  def process
+    # text = File.open("/Users/stevedejongh/Launch-School/RB_130/rb_130_practice_problems/txtfile.txt", 'r') #('r' flag is to open file as read-only)
+    # Path to the file is important depending on what ruby directory the ruby code is executed from.
+    # Likely a better way to adapt this, TBD.
+    text = File.open(File.join(File.dirname(__FILE__),'txtfile.txt'))
+    puts yield(text.read) # `read` actually reads the file.
+    text.close # Important to close files when finished using them.
+  end
+end
+
+analyzer = TextAnalyzer.new
+analyzer.process { |txt| "#{txt.split("\n\n").size} paragraphs"}
+analyzer.process { |txt| "#{txt.split("\n").size} lines"}
+analyzer.process { |txt| "#{txt.split(' ').size} words"}
